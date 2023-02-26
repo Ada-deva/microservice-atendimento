@@ -17,6 +17,6 @@ public class Application {
 	@RequestMapping("/v1/microsservice")
 	@ResponseBody
 	String home(){
-		return "Microsservice-template 1.0";
+		return "Microsservice-atendimento 1.0";
 	}
 }
