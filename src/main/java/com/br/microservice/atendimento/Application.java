@@ -14,7 +14,7 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
-	@RequestMapping("/v1/microsservice")
+	@RequestMapping("/v1/atendimento")
 	@ResponseBody
 	String home(){
 		return "Microsservice-atendimento 1.0";
