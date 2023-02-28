@@ -17,4 +17,11 @@ server:
     port: 8082
 client:
     viacepapi:
-        uri: ${VIAEP_URI:https://viacep.com.br/ws/}
+          uri: https://viacep.com.br/ws/
+sendgrid:
+  sendgrid-api-key: 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
+application:
+    email: brunaccelestino@gmail.com
+springdoc:
+    api-docs:
+        path: /api-docs

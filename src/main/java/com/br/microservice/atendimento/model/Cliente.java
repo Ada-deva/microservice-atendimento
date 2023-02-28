@@ -2,13 +2,16 @@ package com.br.microservice.atendimento.model;
 
 import com.br.microservice.atendimento.exception.InformacaoInvalidaException;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
+@Slf4j
 @Data
 @Entity
 @Table(name = "Cliente")
+@NoArgsConstructor
 public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,12 +42,26 @@ public class Cliente {
         this.nome = nome;
         this.celular = celular;
         this.email = email;
+        log.info("---Checando  CPF do Cliente---");
         if(cpf.replaceAll("[\\.-]", "").isBlank()) {
+            log.warn("---CPF vazio---");
             throw new InformacaoInvalidaException("CPF inválido!");
         } else {
+            log.info("---CPF não é nulo---");
             this.cpf = cpf;
         }
         this.endereco = endereco;
         this.dataCadastro = dataCadastro;
+    }
+
+    public void setCpf(String cpf) throws InformacaoInvalidaException {
+        log.info("---Checando  CPF do Cliente---");
+        if(cpf.replaceAll("[\\.-]", "").isBlank()) {
+            log.warn("---CPF vazio---");
+            throw new InformacaoInvalidaException("CPF inválido!");
+        } else {
+            log.info("---CPF não é nulo---");
+            this.cpf = cpf;
+        }
     }
 }
