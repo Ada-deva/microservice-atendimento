@@ -15,3 +15,6 @@ server:
     error:
       include-message: always
     port: 8082
+client:
+    viacepapi:
+        uri: ${VIAEP_URI:https://viacep.com.br/ws/}
