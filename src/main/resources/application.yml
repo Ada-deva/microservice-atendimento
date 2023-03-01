@@ -19,7 +19,7 @@ client:
     viacepapi:
           uri: https://viacep.com.br/ws/
 sendgrid:
-  sendgrid-api-key: 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
+  sendgrid-api-key: secret
 application:
     email: brunaccelestino@gmail.com
 springdoc:
