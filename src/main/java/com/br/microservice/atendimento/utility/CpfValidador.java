@@ -1,23 +1,27 @@
 package com.br.microservice.atendimento.utility;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import java.util.Arrays;
 
 public class CpfValidador {
-    public static boolean isValidCPF(String CPF) {
+    private CpfValidador() {
+    }
+
+    public static boolean isValidCPF(String cpf) {
         int sum = 0;
         int rest;
 
-
-        if (!CPF.matches("^[0-9]{3}(.)[0-9]{3}(.)[0-9]{3}(-)[0-9]{2}$")) {
+        if (!cpf.matches("([0-9]{3}[.]?[0-9]{3}[.]?[0-9]{3}-[0-9]{2})|([0-9]{11})")) {
 
             return false;
         } else {
 
-            String strCPF = CPF.replace(".", "");
-            strCPF = strCPF.replace("-", "");
+            String strcpf = cpf.replace(".", "");
+            strcpf = strcpf.replace("-", "");
 
 
-            String cpfChanged = strCPF;
+            String cpfChanged = strcpf;
 
             if (cpfChanged.length() != 11) {
 
@@ -47,8 +51,10 @@ public class CpfValidador {
 
                     rest = (sum * 10) % 11;
 
-                    if (rest == 10) rest = 0;
-                    if (rest != Integer.parseInt(strCPF.substring(9, 10), 10)) {
+                    if (rest == 10) {
+                        rest = 0;
+                    }
+                    if (rest != Integer.parseInt(strcpf.substring(9, 10), 10)) {
 
                         return false;
 
@@ -57,17 +63,13 @@ public class CpfValidador {
                         sum = 0;
 
                         for (int i = 1; i <= 10; i += 1)
-                            sum += Integer.parseInt(strCPF.substring(i - 1, i), 10) * (12 - i);
+                            sum += Integer.parseInt(strcpf.substring(i - 1, i), 10) * (12 - i);
                         rest = (sum * 10) % 11;
-                        if (rest == 10) rest = 0;
-                        if (rest != Integer.parseInt(strCPF.substring(10, 11), 10)) {
-
-                            return false;
-                        } else {
-
-
-                            return true;
+                        if (rest == 10) {
+                            rest = 0;
                         }
+
+                        return rest == Integer.parseInt(strcpf.substring(10, 11), 10);
                     }
                 }
             }

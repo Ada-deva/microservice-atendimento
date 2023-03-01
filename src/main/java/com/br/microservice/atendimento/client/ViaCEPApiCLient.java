@@ -21,13 +21,13 @@ public class ViaCEPApiCLient {
     public ViaCEPApi getViaCEPApi(String cep) {
 
         log.info("---Formatando  CEP do Cliente---");
-        cep = cep.replaceAll("-", "");
-        String URI = env.getUri();
-        URI = URI + cep + "/json/";
+        cep = cep.replace("-", "");
+        String uri = env.getUri();
+        uri = uri + cep + "/json/";
 
         log.info("---Requisitando endereço---");
         Mono<ViaCEPApi> viaCEPApiMono =
-                client.get().uri(URI).retrieve().bodyToMono(ViaCEPApi.class);
+                client.get().uri(uri).retrieve().bodyToMono(ViaCEPApi.class);
         return viaCEPApiMono.block();
 
     }

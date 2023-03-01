@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class Endereco {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     private String logradouro;
 
@@ -27,7 +27,7 @@ public class Endereco {
     private String estado;
 
     public Endereco(Long id, String logradouro, String numero, String bairro, String cep, String cidade, String estado) throws InformacaoInvalidaException {
-        Id = id;
+        this.id = id;
         this.logradouro = logradouro;
         this.numero = numero;
         this.bairro = bairro;
