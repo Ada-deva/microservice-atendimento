@@ -71,10 +71,11 @@ public class ClienteController {
 
     @PatchMapping("/{id}")
         public ResponseEntity<Cliente> atualizarCliente(@RequestBody Cliente cliente, @PathVariable Long id) throws InformacaoInvalidaException {
-        if(cliente.getCpf() !=null)
-        if(!isValidCPF(cliente.getCpf())) {
-            log.warn("---CPF inválido---");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não foi informado um CPF válido");
+        if(cliente.getCpf() !=null) {
+            if(!isValidCPF(cliente.getCpf())) {
+                log.warn("---CPF inválido---");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não foi informado um CPF válido");
+            }
         }
 
         Optional<Cliente> clienteAtualizado = clienteService.atualizarCliente(cliente, id);
@@ -86,5 +87,19 @@ public class ClienteController {
         }
 
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Cliente> deletarCliente(@PathVariable Long id) {
+
+        Optional<Cliente> clienteDeletado = clienteService.deletarCliente(id);
+
+        if(clienteDeletado.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado!");
+        } else {
+            return new ResponseEntity<>(clienteDeletado.get(), HttpStatus.OK);
+        }
+
+    }
+
 
 }

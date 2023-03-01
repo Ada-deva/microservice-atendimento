@@ -89,7 +89,7 @@ public class ClienteService {
     }
 
     public Optional<Cliente> atualizarCliente(Cliente cliente, Long id) throws InformacaoInvalidaException {
-        Optional<Cliente> clienteEncontrado = encontrarPorId(id);
+        Optional<Cliente> clienteEncontrado = clienteRepository.findById(id);
 
 
         if (clienteEncontrado.isPresent()) {
@@ -118,6 +118,13 @@ public class ClienteService {
 
 
 
+    public Optional<Cliente> deletarCliente(Long id) {
+        Optional<Cliente> clienteEncontrado = clienteRepository.findById(id);
+
+        clienteEncontrado.ifPresent(cliente -> clienteRepository.delete(cliente));
+
+        return clienteEncontrado;
+    }
 
 
 
