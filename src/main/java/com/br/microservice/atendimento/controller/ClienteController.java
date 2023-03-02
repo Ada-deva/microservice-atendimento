@@ -1,5 +1,6 @@
 package com.br.microservice.atendimento.controller;
 
+import com.br.microservice.atendimento.dto.ClienteDTO;
 import com.br.microservice.atendimento.exception.InformacaoInvalidaException;
 import com.br.microservice.atendimento.model.Cliente;
 import com.br.microservice.atendimento.service.ClienteService;
@@ -28,7 +29,9 @@ public class ClienteController {
     @ResponseStatus(HttpStatus.CREATED)
     @ExceptionHandler(InformacaoInvalidaException.class)
     @PostMapping
-    public ResponseEntity<Cliente> cadastrarCliente(@RequestBody Cliente cliente) throws InformacaoInvalidaException, IOException {
+    public ResponseEntity<ClienteDTO> cadastrarCliente(@RequestBody ClienteDTO cliente) throws InformacaoInvalidaException
+            , IOException {
+
         log.info("---Recebendo informações do Cliente---");
         log.info("---Validando o CPF do Cliente---");
 
@@ -38,13 +41,16 @@ public class ClienteController {
         }
 
         log.info("---Enviando cliente para cadastro---");
-        Optional<Cliente> novoCliente = clienteService.cadastrar(cliente);
+        Optional<Cliente> novoCliente = clienteService.cadastrar(cliente.toEntity());
+
 
         log.info("---Checando se Cliente foi salvo com sucesso---");
         if(novoCliente.isPresent()) {
             log.info("---Cliente salvo com sucesso---");
             Cliente response = novoCliente.get();
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+
+            log.info("---Convertendo para DTO---");
+            return new ResponseEntity<>(cliente.of(response), HttpStatus.CREATED);
         } else {
             log.warn("---Registro do Cliente falhou---");
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Cliente não " +

@@ -1,6 +1,7 @@
 package com.br.microservice.atendimento.service;
 
 import com.br.microservice.atendimento.client.ViaCEPApiCLient;
+import com.br.microservice.atendimento.dto.ClienteDTO;
 import com.br.microservice.atendimento.exception.InformacaoInvalidaException;
 import com.br.microservice.atendimento.model.Cliente;
 import com.br.microservice.atendimento.model.Endereco;
