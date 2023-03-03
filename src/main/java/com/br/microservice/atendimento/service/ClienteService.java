@@ -84,7 +84,6 @@ public class ClienteService {
     }
 
     public Optional<Cliente> encontrarPorId(Long id) {
-
         return clienteRepository.findById(id);
 
     }
