@@ -88,7 +88,7 @@ public class ClienteService {
 
     }
 
-    public Optional<Cliente> atualizarCliente(Cliente cliente, Long id) throws InformacaoInvalidaException {
+    public Optional<Cliente> atualizarCliente(ClienteDTO cliente, Long id) throws InformacaoInvalidaException {
         Optional<Cliente> clienteEncontrado = clienteRepository.findById(id);
 
 

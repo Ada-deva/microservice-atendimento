@@ -76,7 +76,7 @@ public class ClienteController {
     }
 
     @PatchMapping("/{id}")
-        public ResponseEntity<Cliente> atualizarCliente(@RequestBody Cliente cliente, @PathVariable Long id) throws InformacaoInvalidaException {
+        public ResponseEntity<ClienteDTO> atualizarCliente(@RequestBody ClienteDTO cliente, @PathVariable Long id) throws InformacaoInvalidaException {
         if(cliente.getCpf() !=null) {
             if(!isValidCPF(cliente.getCpf())) {
                 log.warn("---CPF inválido---");
@@ -89,7 +89,7 @@ public class ClienteController {
         if(clienteAtualizado.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado!");
         } else {
-            return new ResponseEntity<>(clienteAtualizado.get(), HttpStatus.OK);
+            return new ResponseEntity<>(cliente.of(clienteAtualizado.get()), HttpStatus.OK);
         }
 
     }
