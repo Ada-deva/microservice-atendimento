@@ -1,7 +1,9 @@
 package com.br.microservice.atendimento.controller;
 
 
+import com.br.microservice.atendimento.dto.ClienteDTO;
 import com.br.microservice.atendimento.dto.ComandaDTO;
+import com.br.microservice.atendimento.exception.InformacaoInvalidaException;
 import com.br.microservice.atendimento.exception.InformacaoNaoEncontradaException;
 import com.br.microservice.atendimento.model.Cliente;
 import com.br.microservice.atendimento.model.Comanda;
@@ -15,7 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
+
+import static com.br.microservice.atendimento.utility.CpfValidador.isValidCPF;
 
 @RestController
 @RequestMapping("/comanda")
@@ -44,5 +49,48 @@ public class ComandaController {
             Comanda response = novaComanda.get();
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
+    }
+
+
+    @GetMapping
+    public ResponseEntity<List<Comanda>> obterListaComandas() {
+        return new ResponseEntity<>(comandaService.comandaList(), HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Comanda> encontrarPorId(@PathVariable Long id) {
+        Optional<Comanda> comanda = comandaService.encontrarPorId(id);
+
+        if(comanda.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, responseMessage.getNaoEncontrado());
+        } else {
+            return new ResponseEntity<>(comanda.get(), HttpStatus.OK);
+        }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Comanda> atualizarComanda(@RequestBody ComandaDTO comanda, @PathVariable Long id) throws InformacaoInvalidaException, InformacaoNaoEncontradaException {
+
+        Optional<Comanda> comandaAtualizada = comandaService.atualizarComanda(comanda, id);
+
+        if(comandaAtualizada.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, responseMessage.getNaoEncontrado());
+        } else {
+            return new ResponseEntity<>(comandaAtualizada.get(), HttpStatus.OK);
+        }
+
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Comanda> deletarComanda(@PathVariable Long id) {
+
+        Optional<Comanda> comandaDeletada = comandaService.deletarComanda(id);
+
+        if(comandaDeletada.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, responseMessage.getNaoEncontrado());
+        } else {
+            return new ResponseEntity<>(comandaDeletada.get(), HttpStatus.OK);
+        }
+
     }
 }

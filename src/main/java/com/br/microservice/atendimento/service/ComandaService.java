@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -28,16 +29,54 @@ public class ComandaService {
         Optional<Cliente> clienteEncontrado = clienteRepository.findById(comanda.getCliente());
         Comanda novaComanda = comanda.toEntity();
 
-        if(clienteEncontrado.isEmpty()) {
+        if (clienteEncontrado.isEmpty()) {
             throw new InformacaoNaoEncontradaException("Cliente não encontrado!");
         } else {
             clienteEncontrado.ifPresent(novaComanda::setCliente);
             novaComanda.setData(LocalDateTime.now());
             comandaRepository.save(novaComanda);
         }
-
-
-
         return Optional.of(novaComanda);
+    }
+
+    public List<Comanda> comandaList() {
+        return (List<Comanda>) comandaRepository.findAll();
+    }
+
+    public Optional<Comanda> encontrarPorId(Long id) {
+        return comandaRepository.findById(id);
+    }
+
+    public Optional<Comanda> atualizarComanda(ComandaDTO comanda, Long id) throws InformacaoNaoEncontradaException {
+        Optional<Comanda> comandaEncontrada = comandaRepository.findById(id);
+        if (comandaEncontrada.isPresent()) {
+            if (comanda.getConta() != 0) {
+                comandaEncontrada.get().setConta(comanda.getConta());
+            }
+
+            if (comanda.getTipoPagamento() != null) {
+                comandaEncontrada.get().setTipoPagamento(comanda.getTipoPagamento());
+            }
+
+            if (comanda.getCliente() != 0) {
+                Optional<Cliente> clienteEncontrado = clienteRepository.findById(comanda.getCliente());
+                if (clienteEncontrado.isEmpty()) {
+                    throw new InformacaoNaoEncontradaException("Cliente não encontrado!");
+                } else {
+                    comandaEncontrada.get().setCliente(clienteEncontrado.get());
+                }
+            }
+            comandaRepository.save(comandaEncontrada.get());
+        }
+
+        return comandaEncontrada;
+    }
+
+    public Optional<Comanda> deletarComanda(Long id) {
+        Optional<Comanda> comandaEncontrada = comandaRepository.findById(id);
+
+        comandaEncontrada.ifPresent(comanda -> comandaRepository.delete(comanda));
+
+        return comandaEncontrada;
     }
 }
