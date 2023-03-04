@@ -3,9 +3,11 @@ package com.br.microservice.atendimento.controller;
 import com.br.microservice.atendimento.dto.ClienteDTO;
 import com.br.microservice.atendimento.exception.InformacaoInvalidaException;
 import com.br.microservice.atendimento.model.Cliente;
+import com.br.microservice.atendimento.response.message.ResponseMessage;
 import com.br.microservice.atendimento.service.ClienteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,11 @@ import static com.br.microservice.atendimento.utility.CpfValidador.isValidCPF;
 public class ClienteController {
 
     private final ClienteService clienteService;
+    private ResponseMessage responseMessage;
+    @Autowired
+    private void responseMessage() {
+        responseMessage = new ResponseMessage(Cliente.class.getSimpleName());
+    }
 
     @ResponseStatus(HttpStatus.CREATED)
     @ExceptionHandler(InformacaoInvalidaException.class)
@@ -37,7 +44,7 @@ public class ClienteController {
 
         if(!isValidCPF(cliente.getCpf())) {
             log.warn("---CPF inválido---");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não foi informado um CPF válido");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, responseMessage.getCpfInvalido());
         }
 
         log.info("---Enviando cliente para cadastro---");
@@ -53,8 +60,7 @@ public class ClienteController {
             return new ResponseEntity<>(cliente.of(response), HttpStatus.CREATED);
         } else {
             log.warn("---Registro do Cliente falhou---");
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, "Cliente não " +
-                    "cadastrado");
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, responseMessage.getNaoCadastrado());
         }
 
     }
@@ -69,7 +75,7 @@ public class ClienteController {
         Optional<Cliente> cliente = clienteService.encontrarPorId(id);
 
         if(cliente.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado!");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, responseMessage.getNaoEncontrado());
         } else {
             return new ResponseEntity<>(cliente.get(), HttpStatus.OK);
         }
@@ -80,14 +86,14 @@ public class ClienteController {
         if(cliente.getCpf() !=null) {
             if(!isValidCPF(cliente.getCpf())) {
                 log.warn("---CPF inválido---");
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Não foi informado um CPF válido");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, responseMessage.getNaoEncontrado());
             }
         }
 
         Optional<Cliente> clienteAtualizado = clienteService.atualizarCliente(cliente, id);
 
         if(clienteAtualizado.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado!");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, responseMessage.getNaoEncontrado());
         } else {
             return new ResponseEntity<>(cliente.of(clienteAtualizado.get()), HttpStatus.OK);
         }
@@ -100,7 +106,7 @@ public class ClienteController {
         Optional<Cliente> clienteDeletado = clienteService.deletarCliente(id);
 
         if(clienteDeletado.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente não encontrado!");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, responseMessage.getNaoEncontrado());
         } else {
             return new ResponseEntity<>(clienteDeletado.get(), HttpStatus.OK);
         }

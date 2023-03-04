@@ -31,7 +31,7 @@ class ClienteTest {
         cliente.setCpf("355.934.510-36");
 
         assertNotNull(cliente);
-        
+
     }
 
     @Test
