@@ -1,6 +1,5 @@
 package com.br.microservice.atendimento.utility;
 
-import org.hibernate.validator.constraints.br.CPF;
 
 import java.util.Arrays;
 
@@ -12,7 +11,7 @@ public class CpfValidador {
         int sum = 0;
         int rest;
 
-        if (!cpf.matches("([0-9]{3}[.]?[0-9]{3}[.]?[0-9]{3}-[0-9]{2})|([0-9]{11})")) {
+        if (!cpf.matches("^[0-9]{3}(.)[0-9]{3}(.)[0-9]{3}(-)[0-9]{2}$")) {
 
             return false;
         } else {

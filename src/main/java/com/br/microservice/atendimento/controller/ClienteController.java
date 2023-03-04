@@ -83,11 +83,9 @@ public class ClienteController {
 
     @PatchMapping("/{id}")
         public ResponseEntity<ClienteDTO> atualizarCliente(@RequestBody ClienteDTO cliente, @PathVariable Long id) throws InformacaoInvalidaException {
-        if(cliente.getCpf() !=null) {
-            if(!isValidCPF(cliente.getCpf())) {
+        if(cliente.getCpf() !=null && !isValidCPF(cliente.getCpf())) {
                 log.warn("---CPF inválido---");
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, responseMessage.getNaoEncontrado());
-            }
         }
 
         Optional<Cliente> clienteAtualizado = clienteService.atualizarCliente(cliente, id);
