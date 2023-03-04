@@ -1,6 +1,7 @@
 package com.br.microservice.atendimento.controller;
 
 import com.br.microservice.atendimento.dto.ComandaDTO;
+import com.br.microservice.atendimento.exception.BadRequestException;
 import com.br.microservice.atendimento.exception.InformacaoNaoEncontradaException;
 import com.br.microservice.atendimento.model.Comanda;
 import com.br.microservice.atendimento.response.message.ResponseMessage;
@@ -88,7 +89,7 @@ public class ComandaController {
     }
 
     @PatchMapping("/pagar/{id}")
-    public ResponseEntity<Comanda> pagarComanda(@PathVariable Long id) throws Exception {
+    public ResponseEntity<Comanda> pagarComanda(@PathVariable Long id) throws BadRequestException {
         Optional<Comanda> comandaPaga = comandaService.pagarComanda(id);
 
         if(comandaPaga.isEmpty()) {

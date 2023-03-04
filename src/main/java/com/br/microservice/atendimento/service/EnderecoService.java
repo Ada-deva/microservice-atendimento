@@ -64,38 +64,32 @@ public class EnderecoService {
 
         if (enderecoEncontrado.isPresent()) {
             if (endereco.getLogradouro() != null
-                    && !endereco.getLogradouro().isBlank()
-                    && !endereco.getLogradouro().isEmpty()) {
+                    && !endereco.getLogradouro().isBlank()) {
                 enderecoEncontrado.get().setLogradouro(endereco.getLogradouro());
             }
 
             if (endereco.getNumero() != null
-                    && !endereco.getNumero().isBlank()
-                    && !endereco.getNumero().isEmpty()) {
+                    && !endereco.getNumero().isBlank()) {
                 enderecoEncontrado.get().setNumero(endereco.getNumero());
             }
 
             if (endereco.getBairro() != null
-                    && !endereco.getBairro().isBlank()
-                    && !endereco.getBairro().isEmpty()) {
+                    && !endereco.getBairro().isBlank()) {
                 enderecoEncontrado.get().setBairro(endereco.getBairro());
             }
 
             if (endereco.getCidade() != null
-                    && !endereco.getCidade().isBlank()
-                    && !endereco.getCidade().isEmpty()) {
+                    && !endereco.getCidade().isBlank()) {
                 enderecoEncontrado.get().setCidade(endereco.getCidade());
             }
 
             if (endereco.getEstado() != null
-                    && !endereco.getEstado().isBlank()
-                    && !endereco.getEstado().isEmpty()) {
+                    && !endereco.getEstado().isBlank()) {
                 enderecoEncontrado.get().setEstado(endereco.getEstado());
             }
 
             if(endereco.getCep()!= null
-                    && !endereco.getCep().isBlank()
-                    && !endereco.getCep().isEmpty()) {
+                    && !endereco.getCep().isBlank()) {
                 enderecoEncontrado.get().setCep(endereco.getCep());
 
             }

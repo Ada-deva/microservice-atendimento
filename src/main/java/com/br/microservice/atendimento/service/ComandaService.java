@@ -1,6 +1,7 @@
 package com.br.microservice.atendimento.service;
 
 import com.br.microservice.atendimento.dto.ComandaDTO;
+import com.br.microservice.atendimento.exception.BadRequestException;
 import com.br.microservice.atendimento.exception.InformacaoNaoEncontradaException;
 import com.br.microservice.atendimento.model.Cliente;
 import com.br.microservice.atendimento.model.Comanda;
@@ -78,13 +79,13 @@ public class ComandaService {
         return comandaEncontrada;
     }
 
-    public Optional<Comanda> pagarComanda(Long id) throws Exception {
+    public Optional<Comanda> pagarComanda(Long id) throws BadRequestException {
         Optional<Comanda> comandaEncontrada = comandaRepository.findById(id);
         if(comandaEncontrada.isPresent() && !comandaEncontrada.get().isPago()) {
             comandaEncontrada.get().setPago(true);
             return comandaEncontrada;
         } else {
-             throw new Exception("Comanda já está paga!");
+             throw new BadRequestException("Comanda já está paga!");
             }
     }
 
