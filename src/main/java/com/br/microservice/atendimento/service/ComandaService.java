@@ -1,13 +1,12 @@
 package com.br.microservice.atendimento.service;
 
-
 import com.br.microservice.atendimento.dto.ComandaDTO;
 import com.br.microservice.atendimento.exception.InformacaoNaoEncontradaException;
 import com.br.microservice.atendimento.model.Cliente;
 import com.br.microservice.atendimento.model.Comanda;
 import com.br.microservice.atendimento.repository.ClienteRepository;
 import com.br.microservice.atendimento.repository.ComandaRepository;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@Slf4j
 @Service
 public class ComandaService {
 
@@ -79,4 +77,15 @@ public class ComandaService {
 
         return comandaEncontrada;
     }
+
+    public Optional<Comanda> pagarComanda(Long id) throws Exception {
+        Optional<Comanda> comandaEncontrada = comandaRepository.findById(id);
+        if(comandaEncontrada.isPresent() && !comandaEncontrada.get().isPago()) {
+            comandaEncontrada.get().setPago(true);
+            return comandaEncontrada;
+        } else {
+             throw new Exception("Comanda já está paga!");
+            }
+    }
+
 }

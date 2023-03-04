@@ -41,35 +41,37 @@ public class ClienteService {
     private String sendgridKey;
 
     public Optional<Cliente> cadastrar(Cliente cliente) throws InformacaoInvalidaException, IOException {
-        if(cliente.getEndereco().getLogradouro() == null
-        || cliente.getEndereco().getLogradouro().isBlank()
-        || cliente.getEndereco().getLogradouro().isEmpty()) {
-            log.info("---Obtendo endereço do Cliente a partir do CEP "  + cliente.getEndereco().getCep() + "---");
-            ViaCEPApi enderecoEncontrado =  viaCEPApiCLient.getViaCEPApi(cliente.getEndereco().getCep());
-
-            if(enderecoEncontrado == null) {
-                log.info("---CEP não encontrado!---");
-                throw new InformacaoInvalidaException("CEP não encontrado!");
-            } else {
-                log.info("---CEP encontrado!---");
-                log.info("---Setando rua do Cliente---");
-                cliente.getEndereco().setLogradouro(enderecoEncontrado.getLogradouro());
-                log.info("---Setando bairro do Cliente---");
-                cliente.getEndereco().setBairro(enderecoEncontrado.getBairro());
-                log.info("---Setando cidade do Cliente---");
-                cliente.getEndereco().setCidade(enderecoEncontrado.getLocalidade());
-                log.info("---Setando estado do Cliente---");
-                cliente.getEndereco().setEstado(enderecoEncontrado.getUf());
-            }
-        } else{
-            log.info("---Cliente informou o endereço---");
+        Endereco endereco = cliente.getEndereco();
+        ViaCEPApi enderecoEncontrado =  viaCEPApiCLient.getViaCEPApi(endereco.getCep());
+        if(enderecoEncontrado == null) {
+            throw new InformacaoInvalidaException("CEP não encontrado!");
+        }
+        if(endereco.getLogradouro() == null
+                || endereco.getLogradouro().isBlank()
+                || endereco.getLogradouro().isEmpty()) {
+            endereco.setLogradouro(enderecoEncontrado.getLogradouro());
         }
 
+        if(endereco.getBairro() == null
+                || endereco.getBairro().isBlank()
+                || endereco.getBairro().isEmpty()) {
+            endereco.setBairro(enderecoEncontrado.getBairro());
+        }
 
-        log.info("---Data do cadastro " + LocalDateTime.now() + "---");
+        if(endereco.getCidade() == null
+                || endereco.getCidade().isBlank()
+                || endereco.getCidade().isEmpty()) {
+            endereco.setCidade(enderecoEncontrado.getLocalidade());
+        }
+
+        if(endereco.getEstado() == null
+                || endereco.getEstado().isBlank()
+                || endereco.getEstado().isEmpty()) {
+            endereco.setEstado(enderecoEncontrado.getUf());
+        }
+
         cliente.setDataCadastro(LocalDateTime.now());
 
-        log.info("---Salvando Cliente no banco de dados---");
         clienteRepository.save(cliente);
 
         if(cliente.getEmail() != null) {
@@ -146,7 +148,6 @@ public class ClienteService {
         request.setBody(mail.build());
 
         Response response = sg.api(request);
-
         log.info("---Enviando E-mail: response code " + response.getStatusCode() + "---");
 
     }

@@ -34,4 +34,6 @@ public class Comanda {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
+    private boolean isPago = false;
+
 }

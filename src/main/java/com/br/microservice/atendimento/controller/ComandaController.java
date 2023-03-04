@@ -1,16 +1,11 @@
 package com.br.microservice.atendimento.controller;
 
-
-import com.br.microservice.atendimento.dto.ClienteDTO;
 import com.br.microservice.atendimento.dto.ComandaDTO;
-import com.br.microservice.atendimento.exception.InformacaoInvalidaException;
 import com.br.microservice.atendimento.exception.InformacaoNaoEncontradaException;
-import com.br.microservice.atendimento.model.Cliente;
 import com.br.microservice.atendimento.model.Comanda;
 import com.br.microservice.atendimento.response.message.ResponseMessage;
 import com.br.microservice.atendimento.service.ComandaService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +15,10 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 
-import static com.br.microservice.atendimento.utility.CpfValidador.isValidCPF;
 
 @RestController
 @RequestMapping("/comanda")
 @RequiredArgsConstructor
-@Slf4j
 @RestControllerAdvice
 public class ComandaController {
 
@@ -69,7 +62,7 @@ public class ComandaController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Comanda> atualizarComanda(@RequestBody ComandaDTO comanda, @PathVariable Long id) throws InformacaoInvalidaException, InformacaoNaoEncontradaException {
+    public ResponseEntity<Comanda> atualizarComanda(@RequestBody ComandaDTO comanda, @PathVariable Long id) throws InformacaoNaoEncontradaException {
 
         Optional<Comanda> comandaAtualizada = comandaService.atualizarComanda(comanda, id);
 
@@ -90,6 +83,18 @@ public class ComandaController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, responseMessage.getNaoEncontrado());
         } else {
             return new ResponseEntity<>(comandaDeletada.get(), HttpStatus.OK);
+        }
+
+    }
+
+    @PatchMapping("/pagar/{id}")
+    public ResponseEntity<Comanda> pagarComanda(@PathVariable Long id) throws Exception {
+        Optional<Comanda> comandaPaga = comandaService.pagarComanda(id);
+
+        if(comandaPaga.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, responseMessage.getNaoEncontrado());
+        } else {
+            return new ResponseEntity<>(comandaPaga.get(), HttpStatus.OK);
         }
 
     }

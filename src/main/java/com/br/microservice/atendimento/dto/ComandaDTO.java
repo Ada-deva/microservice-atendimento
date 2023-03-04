@@ -1,7 +1,6 @@
 package com.br.microservice.atendimento.dto;
 
 import com.br.microservice.atendimento.enums.TipoPagamento;
-import com.br.microservice.atendimento.model.Cliente;
 import com.br.microservice.atendimento.model.Comanda;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +20,7 @@ public class ComandaDTO {
     private double conta;
     private TipoPagamento tipoPagamento;
     private long cliente;
+    private boolean isPago;
 
     public ComandaDTO of(Comanda comanda) {
         return ComandaDTO.builder()
@@ -29,6 +29,7 @@ public class ComandaDTO {
                 .conta(comanda.getConta())
                 .tipoPagamento(comanda.getTipoPagamento())
                 .cliente(comanda.getCliente().getId())
+                .isPago(comanda.isPago())
                 .build();
     }
 
@@ -38,6 +39,7 @@ public class ComandaDTO {
                 .data(data)
                 .conta(conta)
                 .tipoPagamento(tipoPagamento)
+                .isPago(isPago)
                 .build();
     }
 }

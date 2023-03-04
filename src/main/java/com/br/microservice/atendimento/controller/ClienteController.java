@@ -39,27 +39,24 @@ public class ClienteController {
     public ResponseEntity<ClienteDTO> cadastrarCliente(@RequestBody ClienteDTO cliente) throws InformacaoInvalidaException
             , IOException {
 
-        log.info("---Recebendo informações do Cliente---");
-        log.info("---Validando o CPF do Cliente---");
+
 
         if(!isValidCPF(cliente.getCpf())) {
-            log.warn("---CPF inválido---");
+
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, responseMessage.getCpfInvalido());
         }
 
-        log.info("---Enviando cliente para cadastro---");
+
         Optional<Cliente> novoCliente = clienteService.cadastrar(cliente.toEntity());
 
 
-        log.info("---Checando se Cliente foi salvo com sucesso---");
+
         if(novoCliente.isPresent()) {
-            log.info("---Cliente salvo com sucesso---");
+
             Cliente response = novoCliente.get();
 
-            log.info("---Convertendo para DTO---");
             return new ResponseEntity<>(cliente.of(response), HttpStatus.CREATED);
         } else {
-            log.warn("---Registro do Cliente falhou---");
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, responseMessage.getNaoCadastrado());
         }
 
@@ -84,7 +81,6 @@ public class ClienteController {
     @PatchMapping("/{id}")
         public ResponseEntity<ClienteDTO> atualizarCliente(@RequestBody ClienteDTO cliente, @PathVariable Long id) throws InformacaoInvalidaException {
         if(cliente.getCpf() !=null && !isValidCPF(cliente.getCpf())) {
-                log.warn("---CPF inválido---");
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, responseMessage.getNaoEncontrado());
         }
 
