@@ -29,7 +29,6 @@
 			<properties>
 				<sonar.sources>.</sonar.sources>
 				<sonar.inclusions>src/main/java/**,src/main/resources/**</sonar.inclusions>
-				<sonar.exclusions>src/test/java/**,src/test/resources/**,src/main/java/com/br/microservice/atendimento/utility/CpfValidador.java</sonar.exclusions>
 
 				<sonar.projectKey>Ada-deva_microservice-atendimento</sonar.projectKey>
 				<sonar.organization>adadeva</sonar.organization>
