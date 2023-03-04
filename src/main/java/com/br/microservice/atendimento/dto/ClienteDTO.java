@@ -35,16 +35,17 @@ public class ClienteDTO {
                 .build();
     }
 
-    public Cliente toEntity() throws InformacaoInvalidaException {
-        Cliente cliente = new Cliente();
-        cliente.setId(id);
-        cliente.setNome(nome);
-        cliente.setCelular(celular);
-        cliente.setEmail(email);
-        cliente.setCpf(cpf);
-        cliente.setEndereco(endereco);
-        cliente.setDataCadastro(dataCadastro);
-        return cliente;
+    public Cliente toEntity() {
+        return Cliente
+                .builder()
+                .id(id)
+                .nome(nome)
+                .celular(celular)
+                .email(email)
+                .cpf(cpf)
+                .endereco(endereco)
+                .dataCadastro(dataCadastro)
+                .build();
     }
 
 

@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import static com.br.microservice.atendimento.utility.CpfValidador.isValidCPF;
 
 @RestController
 @RequestMapping("/cliente")
@@ -40,21 +39,12 @@ public class ClienteController {
             , IOException {
 
 
-
-        if(!isValidCPF(cliente.getCpf())) {
-
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, responseMessage.getCpfInvalido());
-        }
-
-
         Optional<Cliente> novoCliente = clienteService.cadastrar(cliente.toEntity());
 
 
 
         if(novoCliente.isPresent()) {
-
             Cliente response = novoCliente.get();
-
             return new ResponseEntity<>(cliente.of(response), HttpStatus.CREATED);
         } else {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, responseMessage.getNaoCadastrado());
@@ -80,10 +70,6 @@ public class ClienteController {
 
     @PatchMapping("/{id}")
         public ResponseEntity<ClienteDTO> atualizarCliente(@RequestBody ClienteDTO cliente, @PathVariable Long id) throws InformacaoInvalidaException {
-        if(cliente.getCpf() !=null && !isValidCPF(cliente.getCpf())) {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, responseMessage.getNaoEncontrado());
-        }
-
         Optional<Cliente> clienteAtualizado = clienteService.atualizarCliente(cliente, id);
 
         if(clienteAtualizado.isEmpty()) {

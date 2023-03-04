@@ -1,8 +1,10 @@
 package com.br.microservice.atendimento.model;
 
-import com.br.microservice.atendimento.exception.InformacaoInvalidaException;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.data.annotation.CreatedDate;
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,6 +13,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "Cliente")
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +29,7 @@ public class Cliente {
     @Column(unique = true)
     private String email;
 
-
+    @CPF
     @Column(unique = true, nullable = false)
     private String cpf;
 
@@ -36,25 +40,4 @@ public class Cliente {
     @CreatedDate
     private LocalDateTime dataCadastro;
 
-    public Cliente(long id, String nome, String celular, String email, String cpf, Endereco endereco, LocalDateTime dataCadastro) throws InformacaoInvalidaException {
-        this.id = id;
-        this.nome = nome;
-        this.celular = celular;
-        this.email = email;
-        if(cpf.replaceAll("[\\.-]", "").isBlank()) {
-            throw new InformacaoInvalidaException("CPF inválido!");
-        } else {
-            this.cpf = cpf;
-        }
-        this.endereco = endereco;
-        this.dataCadastro = dataCadastro;
-    }
-
-    public void setCpf(String cpf) throws InformacaoInvalidaException {
-        if(cpf.replaceAll("[\\.-]", "").isBlank()) {
-            throw new InformacaoInvalidaException("CPF inválido!");
-        } else {
-            this.cpf = cpf;
-        }
-    }
 }
