@@ -59,37 +59,31 @@ public class EnderecoService {
         return enderecoRepository.findById(id);
     }
 
-    public Optional<Endereco> atualizarEndereco(EnderecoDTO endereco, Long id) throws InformacaoInvalidaException {
+    public Optional<Endereco> atualizarEndereco(EnderecoDTO endereco, Long id)  {
         Optional<Endereco> enderecoEncontrado = enderecoRepository.findById(id);
 
         if (enderecoEncontrado.isPresent()) {
-            if (endereco.getLogradouro() != null
-                    && !endereco.getLogradouro().isBlank()) {
+            if (endereco.getLogradouro() != null) {
                 enderecoEncontrado.get().setLogradouro(endereco.getLogradouro());
             }
 
-            if (endereco.getNumero() != null
-                    && !endereco.getNumero().isBlank()) {
+            if (endereco.getNumero() != null) {
                 enderecoEncontrado.get().setNumero(endereco.getNumero());
             }
 
-            if (endereco.getBairro() != null
-                    && !endereco.getBairro().isBlank()) {
+            if (endereco.getBairro() != null) {
                 enderecoEncontrado.get().setBairro(endereco.getBairro());
             }
 
-            if (endereco.getCidade() != null
-                    && !endereco.getCidade().isBlank()) {
+            if (endereco.getCidade() != null) {
                 enderecoEncontrado.get().setCidade(endereco.getCidade());
             }
 
-            if (endereco.getEstado() != null
-                    && !endereco.getEstado().isBlank()) {
+            if (endereco.getEstado() != null) {
                 enderecoEncontrado.get().setEstado(endereco.getEstado());
             }
 
-            if(endereco.getCep()!= null
-                    && !endereco.getCep().isBlank()) {
+            if(endereco.getCep()!= null) {
                 enderecoEncontrado.get().setCep(endereco.getCep());
 
             }
