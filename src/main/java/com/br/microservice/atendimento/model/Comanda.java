@@ -30,7 +30,7 @@ public class Comanda {
     @Column(nullable = false)
     private TipoPagamento tipoPagamento;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
